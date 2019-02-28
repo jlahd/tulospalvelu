@@ -26,10 +26,12 @@
 #include <IdAllFTPListParsers.hpp>
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
+#ifndef NO_EXTRA_LIBS
 #pragma link "ScBridge"
 #pragma link "ScSFTPClient"
 #pragma link "ScSSHClient"
 #pragma link "ScBridge"
+#endif
 #pragma resource "*.dfm"
 TFormJakelu *FormJakelu;
 extern CRITICAL_SECTION autotul_CriticalSection;
@@ -44,8 +46,10 @@ __fastcall TFormJakelu::TFormJakelu(TComponent* Owner)
 	if (Screen->PixelsPerInch != 96) {
 		ScaleBy(Screen->PixelsPerInch, 96);
 	}
+#ifndef NO_EXTRA_LIBS
 	ScSFTPClient->OnDirectoryList = ScSFTPClientDirectoryList;
 	ScFileStorage->Path = WorkingDir;
+#endif
 	SourcePath = WorkingDir;
 	if (SourcePath.Length() > 1 && SourcePath[SourcePath.Length()] != L'\\')
 		SourcePath = SourcePath + L"\\";
@@ -770,6 +774,7 @@ void __fastcall TFormJakelu::EdServerPathExit(TObject *Sender)
 
 void __fastcall TFormJakelu::Luouusiavaintiedostopari1Click(TObject *Sender)
 {
+#ifndef NO_EXTRA_LIBS
 	wchar_t st[100] = L"", ch;
   TCursor OldCursor = Screen->Cursor;
 
@@ -807,16 +812,19 @@ void __fastcall TFormJakelu::Luouusiavaintiedostopari1Click(TObject *Sender)
 	}
 	catch (Exception &ex) {
 	  MessageDlg("Avaimen generointi ei onnistunut: " + ex.Message, mtWarning, TMsgDlgButtons() << mbOK, 0);
-    }
+	}
   }
   __finally {
-    Screen->Cursor = OldCursor;
+	Screen->Cursor = OldCursor;
   }
+#else
+  MessageDlg("SSH-kirjasto puuttuu.", mtError, TMsgDlgButtons() << mbOK, 0);
+#endif
 }
 //---------------------------------------------------------------------------
 
 
-
+#ifndef NO_EXTRA_LIBS
 void __fastcall TFormJakelu::ScSSHClientBeforeConnect(TObject *Sender)
 {
   ScSSHClient->HostName = EdServerAddr->Text;
@@ -844,7 +852,7 @@ void __fastcall TFormJakelu::ScSSHClientBeforeConnect(TObject *Sender)
 
 
 void __fastcall TFormJakelu::ScSSHClientServerKeyValidate(TObject *Sender, TScKey *NewServerKey,
-          bool &Accept)
+		  bool &Accept)
 {
 	String fp, msg;
 
@@ -879,9 +887,11 @@ void __fastcall TFormJakelu::ScSSHClientAfterDisconnect(TObject *Sender)
 	Connected = 0;
 	SendMessage(FormJakelu->Handle,WM_MYMSGDSPMSG,0,0);
 }
+#endif
 //---------------------------------------------------------------------------
 void TFormJakelu::openSFTP(void)
 {
+#ifndef NO_EXTRA_LIBS
 	try {
 		ScSSHClient->Connect();
 		ScSFTPClient->Initialize();
@@ -893,10 +903,14 @@ void TFormJakelu::openSFTP(void)
 	catch(...) {
 
 	}
+#else
+  MessageDlg("SSH-kirjasto puuttuu.", mtError, TMsgDlgButtons() << mbOK, 0);
+#endif
 }
 //---------------------------------------------------------------------------
 void TFormJakelu::SendOnceSFTP(void)
 {
+#ifndef NO_EXTRA_LIBS
 	bool tempConnect = false;
 
 	TStringDynArray Files;
@@ -949,10 +963,14 @@ void TFormJakelu::SendOnceSFTP(void)
 		ScSFTPClient->Disconnect();
 		ScSSHClient->Disconnect();
 		}
+#else
+  MessageDlg("SSH-kirjasto puuttuu.", mtError, TMsgDlgButtons() << mbOK, 0);
+#endif
 }
 //---------------------------------------------------------------------------
 void __fastcall TFormJakelu::OpenDirSFTP(const UnicodeString Path, const UnicodeString SelectedName)
 {
+#ifndef NO_EXTRA_LIBS
 	TCursor OldCursor;
 	TScSFTPFileHandle Handle;
 	int i;
@@ -986,10 +1004,14 @@ void __fastcall TFormJakelu::OpenDirSFTP(const UnicodeString Path, const Unicode
 	__finally {
 		Screen->Cursor = OldCursor;
 		}
+#else
+  MessageDlg("SSH-kirjasto puuttuu.", mtError, TMsgDlgButtons() << mbOK, 0);
+#endif
 }
 //---------------------------------------------------------------------------
 void TFormJakelu::CloseAllSFTP(void)
 {
+#ifndef NO_EXTRA_LIBS
 	if (Connected != 2)
 		return;
 	Connected = 0;
@@ -1001,13 +1023,16 @@ void TFormJakelu::CloseAllSFTP(void)
 	}
 	Panel1->Visible = false;
 	ClientWidth = Panel1->Left - 4;
+#else
+  MessageDlg("SSH-kirjasto puuttuu.", mtError, TMsgDlgButtons() << mbOK, 0);
+#endif
 }
 //---------------------------------------------------------------------------
 
-
+#ifndef NO_EXTRA_LIBS
 void __fastcall TFormJakelu::ScSFTPClientDirectoryList(TObject *Sender, const UnicodeString Path,
 		  const TScSFTPFileHandle Handle, TScSFTPFileInfo *FileInfo,
-          bool EOF)
+		  bool EOF)
 {
 TTreeNode *Node;
 
@@ -1027,10 +1052,15 @@ TTreeNode *Node;
   Node->Text = FileInfo->Filename; // for sorting
 }
 //---------------------------------------------------------------------------
+#endif
 
 void __fastcall TFormJakelu::CBKeyFileDropDown(TObject *Sender)
 {
+#ifndef NO_EXTRA_LIBS
   ScFileStorage->Keys->GetKeyNames(CBKeyFile->Items);
+#else
+  MessageDlg("SSH-kirjasto puuttuu.", mtError, TMsgDlgButtons() << mbOK, 0);
+#endif
 }
 //---------------------------------------------------------------------------
 void TFormJakelu::ProtokollaValinnat(void)
@@ -1069,9 +1099,13 @@ void __fastcall TFormJakelu::rbFTPClick(TObject *Sender)
 
 void __fastcall TFormJakelu::rbSFTPClick(TObject *Sender)
 {
+#ifndef NO_EXTRA_LIBS
 	CloseAll();
 	Protokolla = 1;
 	ProtokollaValinnat();
+#else
+  MessageDlg("SSH-kirjasto puuttuu.", mtError, TMsgDlgButtons() << mbOK, 0);
+#endif
 }
 //---------------------------------------------------------------------------
 
@@ -1092,8 +1126,12 @@ void __fastcall TFormJakelu::BtnLuoKansioClick(TObject *Sender)
 			OpenDir(lbRootDir->Text);
 			break;
 		case 2:
+#ifndef NO_EXTRA_LIBS
 			ScSFTPClient->MakeDirectory(lbRootDir->Text);
 			OpenDirSFTP(lbRootDir->Text);
+#else
+			MessageDlg("SSH-kirjasto puuttuu.", mtError, TMsgDlgButtons() << mbOK, 0);
+#endif
 			break;
 		}
 }
@@ -1119,9 +1157,13 @@ void __fastcall TFormJakelu::BtnPoistaTiedostoClick(TObject *Sender)
 				OpenDir(lbRootDir->Text);
 				break;
 			case 2:
+#ifndef NO_EXTRA_LIBS
 				ScSFTPClient->RemoveFile(GetRootDir() + Node->Text);
 				OpenDirSFTP(lbRootDir->Text);
-			break;
+#else
+				MessageDlg("SSH-kirjasto puuttuu.", mtError, TMsgDlgButtons() << mbOK, 0);
+#endif
+				break;
 			}
 		}
 }

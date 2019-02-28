@@ -307,7 +307,7 @@ TShiftState IntShiftState(int state)
 
 int ValitseHakemisto(wchar_t *Hakemisto, int len)
 {
-	if (Win32MajorVersion >= 6) {
+	if (Win32MajorVersion() >= 6) {
 		TFileOpenDialog *Dlg = new TFileOpenDialog(FormMain);
 		if (Dlg) {
 			Dlg->Title = L"Valitse hakemisto";

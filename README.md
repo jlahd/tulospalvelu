@@ -47,14 +47,12 @@ language is probably compliant with C++03.
 ### Required tools
 The Windows programs are made with
 [Embarcadero C++ Builder](https://www.embarcadero.com/app-development-tools-store/cbuilder).
-Version 10.1 Berlin was successfully used to compile and run the program.
+Version 10.3.1 Rio was successfully used to compile and run the program.
 
-[SecureBridge 7.1 for RAD Studio 10.1 Berlin](https://www.devart.com/sbridge/download.html)
-is an add-on that is required to compile and run the program. NOTE: At least 
-in Windows 10 you must edit one of SecureBridge's header files to be able to 
-compile this program. Open 
-"Program Files (x86)\Devart\SecureBridge for RAD Studio 10\Include\Win32\ScSSHSocket.hpp"
-and change Winapi::Winsock::PSockAddrIn to Winapi::Winsock2::PSockAddrIn.
+On this fork, the dependencies to SecureBridge have been removed (stashed behind the new
+complier flag `NO_EXTRA_LIBS`). To re-enable, remove the flag from the compilation options
+and include the libraries again. For this reason, SSH/SFTP do not work on software
+compiled from this fork.
 
 ### Compile
 1. Open TPsource\V52\RADStudio10\DBboxm-XE.cbproj

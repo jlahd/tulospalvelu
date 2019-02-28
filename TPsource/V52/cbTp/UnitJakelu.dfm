@@ -515,7 +515,7 @@ object FormJakelu: TFormJakelu
     Left = 440
     Top = 56
     Bitmap = {
-      494C010103000400800010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103000400040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000C2A6A400C2A6
       A400C2A6A400C2A6A400C2A6A400C2A6A400C2A6A400C2A6A400C2A6A400C2A6
@@ -676,24 +676,6 @@ object FormJakelu: TFormJakelu
   end
   object SaveDialog1: TSaveDialog
     Left = 192
-    Top = 336
-  end
-  object ScSFTPClient: TScSFTPClient
-    SSHClient = ScSSHClient
-    Left = 304
-    Top = 336
-  end
-  object ScSSHClient: TScSSHClient
-    KeyStorage = ScFileStorage
-    AfterConnect = ScSSHClientAfterConnect
-    BeforeConnect = ScSSHClientBeforeConnect
-    AfterDisconnect = ScSSHClientAfterDisconnect
-    OnServerKeyValidate = ScSSHClientServerKeyValidate
-    Left = 352
-    Top = 336
-  end
-  object ScFileStorage: TScFileStorage
-    Left = 400
     Top = 336
   end
 end

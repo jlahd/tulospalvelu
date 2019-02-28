@@ -29,7 +29,9 @@
 #include <Vcl.Grids.hpp>
 #include <Vcl.Dialogs.hpp>
 #include <Vcl.Buttons.hpp>
+#ifndef NO_EXTRA_LIBS
 #include "ScSSHClient.hpp"
+#endif
 #include <IdBaseComponent.hpp>
 #include <IdComponent.hpp>
 #include <IdExplicitTLSClientServerBase.hpp>

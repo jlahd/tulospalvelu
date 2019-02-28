@@ -36,9 +36,12 @@
 #include <Vcl.ImgList.hpp>
 #include <Vcl.Buttons.hpp>
 #include <Vcl.Menus.hpp>
+#include <System.ImageList.hpp>
+#ifndef NO_EXTRA_LIBS
 #include "ScBridge.hpp"
 #include "ScSFTPClient.hpp"
 #include "ScSSHClient.hpp"
+#endif
 #include <System.ImageList.hpp>
 #ifndef MAXOSUUSLUKU
 #include "HkDeclare.h"
@@ -88,9 +91,11 @@ __published:	// IDE-managed Components
 	TMenuItem *Luemritykset1;
 	TSaveDialog *SaveDialog1;
 	TCheckBox *CBAutoJakelu;
+#ifndef NO_EXTRA_LIBS
 	TScSFTPClient *ScSFTPClient;
 	TScSSHClient *ScSSHClient;
 	TScFileStorage *ScFileStorage;
+#endif
 	TMenuItem *Luouusiavaintiedostopari1;
 	TComboBox *CBKeyFile;
 	TPanel *PanelPW;
@@ -128,6 +133,7 @@ __published:	// IDE-managed Components
 	void __fastcall RGKeepOpenClick(TObject *Sender);
 	void __fastcall EdServerPathExit(TObject *Sender);
 	void __fastcall Luouusiavaintiedostopari1Click(TObject *Sender);
+#ifndef NO_EXTRA_LIBS
 	void __fastcall ScSSHClientBeforeConnect(TObject *Sender);
 	void __fastcall ScSSHClientServerKeyValidate(TObject *Sender, TScKey *NewServerKey,
 		  bool &Accept);
@@ -136,6 +142,7 @@ __published:	// IDE-managed Components
 	void __fastcall ScSFTPClientDirectoryList(TObject *Sender, const UnicodeString Path,
 		  const TScSFTPFileHandle Handle, TScSFTPFileInfo *FileInfo,
 		  bool EOF);
+#endif
 	void __fastcall CBKeyFileDropDown(TObject *Sender);
 	void __fastcall rbFTPClick(TObject *Sender);
 	void __fastcall rbSFTPClick(TObject *Sender);

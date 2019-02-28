@@ -23,7 +23,9 @@
 #include "UnitCfg.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
+#ifndef NO_EXTRA_LIBS
 #pragma link "ScSSHClient"
+#endif
 #pragma resource "*.dfm"
 TFormCfg *FormCfg;
 
